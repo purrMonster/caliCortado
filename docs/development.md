@@ -48,7 +48,7 @@ Use `--config config/local.example.json` for fixed reserved `.test` fixtures. Th
 
 This is the E02 recipe to implement and test; no TLS result is claimed in E01.
 
-1. Obtain a working local container engine. In the infrastructure repository prepare an isolated disposable Traefik stack pinned to the approved version, with synthetic HTTP backends and no personal storage. Keep deployment configuration there.
+1. Obtain a working local container engine. In Calicortado, prepare an isolated disposable Traefik stack pinned to the approved version, with synthetic HTTP backends and no personal storage. Keep all preparation here until the product is ready for deployment.
 2. Map `app`, `auth`, `sync`, `data`, `capture`, `index`, `embed`, `search`, `infer`, `answers`, `backup` under `calicortado.test` to the test ingress using local DNS or user-managed hosts entries. Do not edit production DNS. If 443 is occupied use an isolated VM with its own address, preserving domain URLs.
 3. Issue a local test CA and server certificate with the exact test SANs. Store private keys in ignored local state. Supply that CA explicitly to test clients; user approval/setup is required for machine/device-wide trust changes. Never disable certificate verification.
 4. Configure domain-specific HTTPS routers and authenticated probes. Expose only ingress; backends must not publish host ports. Use encrypted and verified upstream transport whenever a backend is remote. Do not use broad wildcard routing or proxy headers as identity proof.
@@ -60,3 +60,7 @@ This is the E02 recipe to implement and test; no TLS result is claimed in E01.
 For a schema failure inspect the reported operation/example; fix the source contract and compatible consumers, then rerun checks. For a link failure fix the reference or create the actual document; do not add empty placeholders to conceal unfinished work. Tests intentionally prove that a broken link, missing OpenAPI metadata and malformed access requests fail.
 
 Upgrade tooling by editing direct pins, resolving in a fresh venv, reviewing the complete lock diff and rerunning all checks. Restore the prior lock/source to roll back; recreating the disposable venv loses no product data. There is no persistent service state or database migration in E01. Before distributed implementation, complete CAL-007 identity integration and CAL-009 note identity/sync prototype gates. [E01 evidence](acceptance/e01.md) states exactly what has run.
+
+## Infrastructure preparation checks
+
+Run `python -m unittest discover -s tests -p test_domain_api_drafts.py -v` and `python -m unittest discover -s tests -p test_relocation_plan.py -v`. They use the [offline DNS compatibility fixture](../tests/fixtures/DNS-COMPATIBILITY.md), without another checkout. See [preparation instructions](../examples/domain-api/README.md). Live promotion remains a deployment-readiness gate.

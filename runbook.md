@@ -2,6 +2,14 @@
 
 Project decisions, evidence and handoffs. Keep records limited to the second brain.
 
+## 2026-09-29 — Keep all preparation in Calicortado / CAL-005
+
+**User decision:** infrastructure preparation is part of Calicortado and stays here until the product is ready for deployment. This supersedes the earlier placement decision and the pending request to publish or activate the preparation in infrastructure. No live rollout is implied.
+
+**Choice/reason/consequences:** move the nine draft/probe/test files here, transfer the two preparation runbook entries, and remove only those contributions from infrastructure. Preserve every unrelated infrastructure edit. Keep an explicitly documented, offline route-discovery compatibility fixture with the tests so this checkout remains self-contained; the infrastructure DNS implementation itself is neither moved nor modified. Future promotion of deployment-ready configuration follows the infrastructure Git workflow. Status: migration completed.
+
+**Verification and handoff:** copied and byte-verified all nine files before removing their infrastructure originals. Removed only the two exact runbook sections; verified the remainder against the preserved original bytes. Transferred those records below as historical evidence. The infrastructure working tree now contains only the user's existing runbook edits and unrelated untracked workspace; no preparation files remain there. Updated the working agreement, README, map, architecture, plan, development/access/environment/endpoint guides and proposal ownership statements. Rebuilt the HTML proposal. All 28 tests and documentation/contract checks pass from Calicortado using the portable compatibility fixture. No infrastructure commit, push or deployment occurred. Continue local product work; promotion to infrastructure waits until the product is ready for deployment.
+
 ## 2026-09-29 — Plain-language proposal and architecture guide / CAL-001, CAL-004
 
 **Context/options/choice:** the user requested a complete architecture diagram and proposal pitch that teaches nontechnical readers the technology. Create a reader-facing proposal with a visual architecture overview, detailed request-flow diagram, glossary, delivery stages and dated evidence. Provide a portable HTML reading copy alongside repository Markdown. This is documentation work, not a new product scope or deployment grant.
@@ -276,3 +284,44 @@ Project decisions, evidence and handoffs. Keep records limited to the second bra
 **Ownership:** Calicortado owns the project plan and future application code. Infrastructure configuration follows the separate infrastructure repository's Git workflow. Links remain one-way from here; infrastructure documents must not mention Calicortado.
 
 **Evidence limits:** these are carried-forward requirements and proposals, not deployed results. Prior local inspection of infrastructure with identifying revision details omitted found unwired backup sources; its runbook reported disk warnings and pending firewall verification. Recheck only the dependencies needed for this project at implementation time.
+
+## Transferred preparation records — historical ownership superseded
+
+These are the two preparation entries removed from the infrastructure runbook at the user’s request. Their evidence and original context are preserved; ownership, placement and rollout-next-step statements are superseded by the 2026-09-29 Calicortado-only preparation decision above.
+
+### 2026-09-28 — Opt-in domain API ingress examples
+
+
+
+Prepared examples/domain-api with application, compute and workstation-role Compose drafts. They are outside active stacks and DNS scanning, require explicit pinned backend images/ports/middleware/network/certificate settings, and publish no backend ports. No application implementation or readiness is implied. Existing route-derived DNS remains authoritative. Native Windows runtime, sync and backup protocol compatibility need separate verification before activation.
+
+
+
+Reason: review independent domain boundaries and placement before introducing active routes. Alternative immediate router activation was rejected because backend and machine-auth prerequisites are not ready. Live identity/compute node checks were read-only; deployed revisions differ from this checkout and one node has existing edits. Reconcile history and preserve those edits before rollout. No deploy, restart, push or node configuration copy was performed.
+
+
+
+Verification: all three offline tests pass on Python 3.12; parsed all draft YAML files and checked unique labels across 11 services. Tests prove inactive examples, domain substitution and synthetic node relocation through the real DNS generator. No actual Compose render/start, network, TLS or live relocation result is claimed. See examples/domain-api/README.md for enabling prerequisites, staged Git delivery and rollback.
+
+
+
+
+
+
+### 2026-09-29 — Prepare single-owner ingress relocation phases
+
+
+
+Context and decision: the development checkout matches fetched origin/main at the reviewed source revision, so no merge or discard is needed. Preserve unrelated untracked work. Prepare examples/domain-api/prepare_relocation.py and LIVE-RELOCATION.md: two inactive Git source candidates for one synthetic HTTPS hostname. A phase enables the application ingress; B removes its source owner and adds the compute ingress. Runtime A stays available through DNS convergence. The alternative of declaring both owners simultaneously is rejected by existing DNS generation.
+
+
+
+Rationale and boundaries: retain source-derived DNS and commit/push/node-pull delivery, existing per-node ingress/certificate ownership, an explicitly opted-in digest-pinned echo backend and temporary BasicAuth. No persistent state, backend published ports, public tunnel changes or APPS registration. A profile does not prevent DNS discovery once source enters stacks. The generator refuses overwrites and unsafe node/output paths. Details, failure cleanup and reversal are in examples/domain-api/LIVE-RELOCATION.md.
+
+
+
+Read-only preflight found the four relevant nodes at the observed deployed revision, behind newer tunnel/remote-access/recovery source, with existing untracked files on two nodes. Do not remove those files or use global render/setup during this exercise. The procedure uses only refresh-dns.sh and the affected Pi-hole Compose operation; the inventory refresh requests operator-owned sudo. No node change was executed. The proposed hostname was absent from the selected container DNS and file-provider settings; manual records, negative-cache lifetime and all network vantage checks still precede activation.
+
+
+
+Previous local rehearsal: examples/domain-api/ingress_probe.py passed its seven HTTPS/auth/target-switch checks with cleanup on 2026-09-28; its README owns runtime evidence. This is not live DNS relocation. Both relocation tests and all three earlier domain-draft tests pass. Both generated phases render with synthetic inputs and reject missing auth/domain; no published ports or state mounts were present. Publication/live-change approval has been requested against the concrete procedure. No live activation occurred.

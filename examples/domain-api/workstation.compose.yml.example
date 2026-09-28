@@ -1,0 +1,39 @@
+# Review-only ingress skeleton; see README before enabling.
+name: domain-api-workstation
+services:
+  inference:
+    image: '${INFERENCE_IMAGE:?set an approved pinned image}'
+    profiles: [domain-api-draft]
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+    networks: [ingress]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${DOMAIN_API_PROXY_NETWORK:?set owning node proxy network}
+      - traefik.http.routers.api-inference.rule=Host(`infer.${DOMAIN}`)
+      - traefik.http.routers.api-inference.entrypoints=websecure
+      - traefik.http.routers.api-inference.tls=true
+      - traefik.http.routers.api-inference.tls.certresolver=${DOMAIN_API_CERT_RESOLVER:?set existing certificate resolver}
+      - traefik.http.routers.api-inference.middlewares=${INFERENCE_MIDDLEWARES:?set reviewed middleware policy}
+      - traefik.http.routers.api-inference.service=api-inference
+      - traefik.http.services.api-inference.loadbalancer.server.port=${INFERENCE_INTERNAL_PORT:?set adapter port}
+  backup:
+    image: '${BACKUP_IMAGE:?set an approved pinned image}'
+    profiles: [domain-api-draft]
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+    networks: [ingress]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${DOMAIN_API_PROXY_NETWORK:?set owning node proxy network}
+      - traefik.http.routers.api-backup.rule=Host(`backup.${DOMAIN}`)
+      - traefik.http.routers.api-backup.entrypoints=websecure
+      - traefik.http.routers.api-backup.tls=true
+      - traefik.http.routers.api-backup.tls.certresolver=${DOMAIN_API_CERT_RESOLVER:?set existing certificate resolver}
+      - traefik.http.routers.api-backup.middlewares=${BACKUP_MIDDLEWARES:?set reviewed middleware policy}
+      - traefik.http.routers.api-backup.service=api-backup
+      - traefik.http.services.api-backup.loadbalancer.server.port=${BACKUP_INTERNAL_PORT:?set adapter port}
+networks:
+  ingress:
+    external: true
+    name: '${DOMAIN_API_PROXY_NETWORK:?set owning node proxy network}'

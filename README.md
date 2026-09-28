@@ -33,10 +33,10 @@ Documentation is part of each story's Definition of Done, not a final cleanup ta
 
 ## Implementation boundary
 
-This directory owns product planning and future application code. Deployment configuration belongs in the separate infrastructure repository, using its Git workflow. Links run from here to infrastructure; infrastructure documents must not mention Calicortado.
+This directory owns product planning, application code and all infrastructure preparation until the product is ready for deployment. Drafts, probes and their tests live here in [examples/domain-api](examples/domain-api/README.md). Only deployment-ready configuration is promoted to the infrastructure repository using its Git workflow. Links run from here to infrastructure; infrastructure documents must not mention Calicortado.
 
 Notes, secrets and private exports stay outside source control. Planning does not grant deployment, account, remote-creation or publication permission.
 
 ## Next action
 
-CAL-005 is in progress: the [domain registry and verification procedure](docs/operations/endpoints.md) are prepared using `${DOMAIN}`. Private resolver/ingress inputs are recorded; selected live DNS/router configurations show no candidate-prefix collision. A disposable local HTTPS/authentication rehearsal passed seven checks and was cleaned up. The infrastructure checkout now matches its remote, and the two-phase live probe/DNS change and rollback are prepared. Live activation awaits the requested authorization and operator-owned sudo steps. Live mutations follow the [access matrix](docs/operations/access.md); E01 does not authorize deployment. The iPhone capture trial follows the sync prototype.
+CAL-005 is in progress: the [domain registry and verification procedure](docs/operations/endpoints.md) are prepared using `${DOMAIN}`. Private resolver/ingress inputs are recorded; selected live DNS/router configurations show no candidate-prefix collision. A disposable local HTTPS/authentication rehearsal passed seven checks and was cleaned up. The two-phase probe/DNS change and rollback remain preparation here. Promotion to infrastructure and live activation wait until the product is ready for deployment; the earlier standalone probe rollout request is superseded. Live mutations follow the [access matrix](docs/operations/access.md); E01 does not authorize deployment. The iPhone capture trial follows the sync prototype.

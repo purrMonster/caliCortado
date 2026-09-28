@@ -6,7 +6,7 @@ Read README.md, map.md, plan.md, and the relevant design and runbook sections be
 
 ## Scope and ownership
 
-- Keep product intent and application design here. Deployment configuration belongs in the separate infrastructure repository.
+- Keep product intent, application code and all infrastructure preparation here until the product is ready for deployment. Drafts, probes, tests and preparatory runbook entries belong in Calicortado. Only deployment-ready configuration is promoted to the separate infrastructure repository through its Git workflow.
 - Inspect Git status before working in a repository and preserve unrelated edits.
 - Infrastructure changes travel through Git: commit, push, then nodes pull main. Do not copy configuration directly to servers. Node sudo belongs to the user.
 - Links to infrastructure run one way from here. Do not add mentions of Calicortado to infrastructure documentation.

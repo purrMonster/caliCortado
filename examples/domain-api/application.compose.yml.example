@@ -1,0 +1,39 @@
+# Review-only ingress skeleton; see README before enabling.
+name: domain-api-application
+services:
+  display:
+    image: '${DISPLAY_IMAGE:?set an approved pinned image}'
+    profiles: [domain-api-draft]
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+    networks: [ingress]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${DOMAIN_API_PROXY_NETWORK:?set owning node proxy network}
+      - traefik.http.routers.api-display.rule=Host(`app.${DOMAIN}`)
+      - traefik.http.routers.api-display.entrypoints=websecure
+      - traefik.http.routers.api-display.tls=true
+      - traefik.http.routers.api-display.tls.certresolver=${DOMAIN_API_CERT_RESOLVER:?set existing certificate resolver}
+      - traefik.http.routers.api-display.middlewares=${DISPLAY_MIDDLEWARES:?set reviewed middleware policy}
+      - traefik.http.routers.api-display.service=api-display
+      - traefik.http.services.api-display.loadbalancer.server.port=${DISPLAY_INTERNAL_PORT:?set adapter port}
+  identity:
+    image: '${IDENTITY_IMAGE:?set an approved pinned image}'
+    profiles: [domain-api-draft]
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+    networks: [ingress]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${DOMAIN_API_PROXY_NETWORK:?set owning node proxy network}
+      - traefik.http.routers.api-identity.rule=Host(`auth.${DOMAIN}`)
+      - traefik.http.routers.api-identity.entrypoints=websecure
+      - traefik.http.routers.api-identity.tls=true
+      - traefik.http.routers.api-identity.tls.certresolver=${DOMAIN_API_CERT_RESOLVER:?set existing certificate resolver}
+      - traefik.http.routers.api-identity.middlewares=${IDENTITY_MIDDLEWARES:?set reviewed middleware policy}
+      - traefik.http.routers.api-identity.service=api-identity
+      - traefik.http.services.api-identity.loadbalancer.server.port=${IDENTITY_INTERNAL_PORT:?set adapter port}
+networks:
+  ingress:
+    external: true
+    name: '${DOMAIN_API_PROXY_NETWORK:?set owning node proxy network}'

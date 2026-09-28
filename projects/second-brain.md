@@ -170,7 +170,7 @@ Independent versioned packages, manifests, health endpoints, config references a
 - runbook.md: every decision, its status, rationale, consequences and evidence.
 - Future component READMEs/contracts/operations guides: implementable and observed details, created by their stories.
 
-Infrastructure delivery stays in the separate infrastructure repository; this project links outward to implementation evidence and does not add its name to infrastructure documents. No deployment is implied by the plan.
+Infrastructure preparation stays in Calicortado until the product is ready for deployment. Only deployment-ready configuration moves to the separate infrastructure repository for delivery; this project links outward to implementation evidence and does not add its name to infrastructure documents. No deployment is implied by the plan.
 
 ## Technical reference basis
 

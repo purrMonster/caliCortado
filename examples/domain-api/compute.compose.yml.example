@@ -1,0 +1,119 @@
+# Review-only ingress skeleton; see README before enabling.
+name: domain-api-compute
+services:
+  sync:
+    image: '${SYNC_IMAGE:?set an approved pinned image}'
+    profiles: [domain-api-draft]
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+    networks: [ingress]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${DOMAIN_API_PROXY_NETWORK:?set owning node proxy network}
+      - traefik.http.routers.api-sync.rule=Host(`sync.${DOMAIN}`)
+      - traefik.http.routers.api-sync.entrypoints=websecure
+      - traefik.http.routers.api-sync.tls=true
+      - traefik.http.routers.api-sync.tls.certresolver=${DOMAIN_API_CERT_RESOLVER:?set existing certificate resolver}
+      - traefik.http.routers.api-sync.middlewares=${SYNC_MIDDLEWARES:?set reviewed middleware policy}
+      - traefik.http.routers.api-sync.service=api-sync
+      - traefik.http.services.api-sync.loadbalancer.server.port=${SYNC_INTERNAL_PORT:?set adapter port}
+  data:
+    image: '${DATA_IMAGE:?set an approved pinned image}'
+    profiles: [domain-api-draft]
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+    networks: [ingress]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${DOMAIN_API_PROXY_NETWORK:?set owning node proxy network}
+      - traefik.http.routers.api-data.rule=Host(`data.${DOMAIN}`)
+      - traefik.http.routers.api-data.entrypoints=websecure
+      - traefik.http.routers.api-data.tls=true
+      - traefik.http.routers.api-data.tls.certresolver=${DOMAIN_API_CERT_RESOLVER:?set existing certificate resolver}
+      - traefik.http.routers.api-data.middlewares=${DATA_MIDDLEWARES:?set reviewed middleware policy}
+      - traefik.http.routers.api-data.service=api-data
+      - traefik.http.services.api-data.loadbalancer.server.port=${DATA_INTERNAL_PORT:?set adapter port}
+  capture:
+    image: '${CAPTURE_IMAGE:?set an approved pinned image}'
+    profiles: [domain-api-draft]
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+    networks: [ingress]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${DOMAIN_API_PROXY_NETWORK:?set owning node proxy network}
+      - traefik.http.routers.api-capture.rule=Host(`capture.${DOMAIN}`)
+      - traefik.http.routers.api-capture.entrypoints=websecure
+      - traefik.http.routers.api-capture.tls=true
+      - traefik.http.routers.api-capture.tls.certresolver=${DOMAIN_API_CERT_RESOLVER:?set existing certificate resolver}
+      - traefik.http.routers.api-capture.middlewares=${CAPTURE_MIDDLEWARES:?set reviewed middleware policy}
+      - traefik.http.routers.api-capture.service=api-capture
+      - traefik.http.services.api-capture.loadbalancer.server.port=${CAPTURE_INTERNAL_PORT:?set adapter port}
+  index:
+    image: '${INDEX_IMAGE:?set an approved pinned image}'
+    profiles: [domain-api-draft]
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+    networks: [ingress]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${DOMAIN_API_PROXY_NETWORK:?set owning node proxy network}
+      - traefik.http.routers.api-index.rule=Host(`index.${DOMAIN}`)
+      - traefik.http.routers.api-index.entrypoints=websecure
+      - traefik.http.routers.api-index.tls=true
+      - traefik.http.routers.api-index.tls.certresolver=${DOMAIN_API_CERT_RESOLVER:?set existing certificate resolver}
+      - traefik.http.routers.api-index.middlewares=${INDEX_MIDDLEWARES:?set reviewed middleware policy}
+      - traefik.http.routers.api-index.service=api-index
+      - traefik.http.services.api-index.loadbalancer.server.port=${INDEX_INTERNAL_PORT:?set adapter port}
+  embeddings:
+    image: '${EMBEDDINGS_IMAGE:?set an approved pinned image}'
+    profiles: [domain-api-draft]
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+    networks: [ingress]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${DOMAIN_API_PROXY_NETWORK:?set owning node proxy network}
+      - traefik.http.routers.api-embeddings.rule=Host(`embed.${DOMAIN}`)
+      - traefik.http.routers.api-embeddings.entrypoints=websecure
+      - traefik.http.routers.api-embeddings.tls=true
+      - traefik.http.routers.api-embeddings.tls.certresolver=${DOMAIN_API_CERT_RESOLVER:?set existing certificate resolver}
+      - traefik.http.routers.api-embeddings.middlewares=${EMBEDDINGS_MIDDLEWARES:?set reviewed middleware policy}
+      - traefik.http.routers.api-embeddings.service=api-embeddings
+      - traefik.http.services.api-embeddings.loadbalancer.server.port=${EMBEDDINGS_INTERNAL_PORT:?set adapter port}
+  search:
+    image: '${SEARCH_IMAGE:?set an approved pinned image}'
+    profiles: [domain-api-draft]
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+    networks: [ingress]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${DOMAIN_API_PROXY_NETWORK:?set owning node proxy network}
+      - traefik.http.routers.api-search.rule=Host(`search.${DOMAIN}`)
+      - traefik.http.routers.api-search.entrypoints=websecure
+      - traefik.http.routers.api-search.tls=true
+      - traefik.http.routers.api-search.tls.certresolver=${DOMAIN_API_CERT_RESOLVER:?set existing certificate resolver}
+      - traefik.http.routers.api-search.middlewares=${SEARCH_MIDDLEWARES:?set reviewed middleware policy}
+      - traefik.http.routers.api-search.service=api-search
+      - traefik.http.services.api-search.loadbalancer.server.port=${SEARCH_INTERNAL_PORT:?set adapter port}
+  answers:
+    image: '${ANSWERS_IMAGE:?set an approved pinned image}'
+    profiles: [domain-api-draft]
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+    networks: [ingress]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${DOMAIN_API_PROXY_NETWORK:?set owning node proxy network}
+      - traefik.http.routers.api-answers.rule=Host(`answers.${DOMAIN}`)
+      - traefik.http.routers.api-answers.entrypoints=websecure
+      - traefik.http.routers.api-answers.tls=true
+      - traefik.http.routers.api-answers.tls.certresolver=${DOMAIN_API_CERT_RESOLVER:?set existing certificate resolver}
+      - traefik.http.routers.api-answers.middlewares=${ANSWERS_MIDDLEWARES:?set reviewed middleware policy}
+      - traefik.http.routers.api-answers.service=api-answers
+      - traefik.http.services.api-answers.loadbalancer.server.port=${ANSWERS_INTERNAL_PORT:?set adapter port}
+networks:
+  ingress:
+    external: true
+    name: '${DOMAIN_API_PROXY_NETWORK:?set owning node proxy network}'

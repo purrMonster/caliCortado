@@ -199,7 +199,7 @@ The proposed generation path uses a local model with no automatic cloud-model fa
 | Five infrastructure preparation tests and two Compose phase validations passed | Reviewed source can describe a one-name move and fail on missing settings | Live rollout, certificate issuance or DNS convergence |
 | Selected live DNS/router settings inspected read-only | No matching proposed-name conflicts in those inspected settings | Complete zone ownership or readiness on every host |
 
-CAL-005 remains In progress. The live test is prepared and awaits the requested authorization and operator-owned privileged DNS steps. Notes, capture, sync, recovery, search, AI answers and the website still need implementation and acceptance. The temporary BasicAuth test is not the intended final identity system.
+CAL-005 remains In progress. The live test is prepared in Calicortado. All infrastructure preparation stays here until the product is ready for deployment; the earlier request to activate it separately is superseded. Notes, capture, sync, recovery, search, AI answers and the website still need implementation and acceptance. The temporary BasicAuth test is not the intended final identity system.
 
 ## 10. The route to a usable release
 
@@ -226,7 +226,7 @@ The proposal reuses existing infrastructure where suitable. It does not establis
 
 The user owns device setup, real-device usability feedback, reserved node sudo and choices about recovery and acceptable availability. Implementation work owns the APIs, integration, tests and documentation. Every consequential decision belongs in the runbook when it is made. Real notes should only be introduced after the relevant privacy, recovery and onboarding gates; development can proceed with synthetic notes.
 
-The immediate proposed increment is the disposable live routing test, then secure sync and the data foundation. Finishing that test would prove one connection pattern—not finish the product. This proposal adds no deployment authorization and does not close any existing story.
+The immediate work is to continue secure sync/data development and local preparation inside Calicortado; the prepared live routing test belongs to the eventual deployment-readiness process. Finishing that test would prove one connection pattern—not finish the product. This proposal adds no deployment authorization and does not close any existing story.
 
 ## 12. A small technology dictionary
 

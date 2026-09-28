@@ -33,3 +33,7 @@ Recorded 2026-09-27. References identify custody, never secret values. Decisions
 All live deployment work is explicitly blocked by the missing mutation grant; source and synthetic fixture work can proceed where story dependencies permit. No extra tracker is introduced. Resolve each gate in its owning story and record evidence in the runbook.
 
 Infrastructure changes must be committed and pushed in the infrastructure repository, then nodes pull `main`; no direct copying of configuration. Node-local untracked files must be understood before a pull/deployment. Calicortado may link to implementation evidence there; infrastructure must not gain Calicortado references.
+
+## Preparation ownership — 2026-09-29
+
+The user requires all infrastructure preparation to stay in Calicortado until the product is ready for deployment. The earlier request to publish/activate the standalone probe is superseded; it is not pending rollout authority. Drafts, local rehearsals and offline tests stay here. Only deployment-ready configuration is promoted through the infrastructure Git workflow. Node sudo remains with the user.

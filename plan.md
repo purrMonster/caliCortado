@@ -91,7 +91,7 @@ Each epic is a parent task, initially Backlog/High/unassigned with no dates. Its
 
 ## Pick-up instructions
 
-The detailed cards below are ready to copy into Vikunja descriptions. All referenced `docs/`, `contracts/`, `services/`, `clients/`, `display/` and `tests/` paths are **deliverables to create during the story**, not claims that implementations already exist. Paths are relative to this project unless explicitly infrastructure-owned. Read [AGENTS.md](AGENTS.md) before implementation. Each card repeats its closure requirement so it can be picked up alone.
+The detailed cards below are ready to copy into Vikunja descriptions. All referenced `docs/`, `contracts/`, `services/`, `clients/`, `display/` and `tests/` paths are **deliverables to create during the story**, not claims that implementations already exist. Paths are relative to this project. Infrastructure preparation stays here until the product is ready for deployment; only then is deployment-ready configuration promoted. Read [AGENTS.md](AGENTS.md) before implementation. Each card repeats its closure requirement so it can be picked up alone.
 
 ## CAL-E01 — Delivery foundation and contracts
 
@@ -329,7 +329,7 @@ The detailed cards below are ready to copy into Vikunja descriptions. All refere
 - [ ] Streaming route test does not buffer the entire response, and configuration rollback restores the previous route.
 - [ ] The documentation and decision record below are complete, reviewed and linked from the task.
 
-**Documentation deliverables:** docs/operations/traefik.md; infrastructure-owned route templates and implementation evidence.
+**Documentation deliverables:** docs/operations/traefik.md; Calicortado-owned route drafts and preparation evidence, promoted to infrastructure only when deployment-ready.
 
 **Runbook decisions to record:** Ingress topology, upstream trust, route policies and direct-access restrictions. For each decision record date, status, alternatives, rationale, consequences and evidence; reference existing decisions explicitly.
 
