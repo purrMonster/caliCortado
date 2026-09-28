@@ -21,4 +21,4 @@ Set DOMAIN in the deployment environment; [.env.example](../../.env.example) con
 
 E01 checks passed on Python 3.12.14 with the pinned lockfile. PowerShell 7 supports the Vikunja exporter. The offline foundation does not need Docker, production accounts or a sibling checkout. Live container/TLS verification remains E02 work. See [development](../development.md).
 
-Application code and product decisions belong here; deployment configuration belongs in a separate infrastructure repository. No remote setup or publication has been performed by this work. The owner is preparing the remote separately. [Access boundaries](access.md) remain applicable; an earlier authorization for private targets does not authorize a new environment.
+Application code and product decisions belong here; deployment configuration belongs in a separate infrastructure repository. The owner-supplied remote received the initial sanitized application baseline on 2026-09-28. This is source publication, not service deployment. [Access boundaries](access.md) remain applicable; an earlier authorization for private targets does not authorize a new environment.

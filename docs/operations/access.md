@@ -11,7 +11,7 @@ Recorded 2026-09-27. References identify custody, never secret values. Decisions
 | Node sudo | User | No sudo executed by assistant; user runs required approved steps |
 | Configure/restart/deploy nodes | No standing grant recorded | Block live mutations pending concrete reviewed change and authorization |
 | Downtime window / spending | Unset / no spending grant | No purchased hardware/services or assumed downtime |
-| Remote creation/publication | Not authorized | Local Git only; no remote or publication |
+| Source publication | User supplied remote and asked to proceed with pending actions | Initial application baseline pushed; infrastructure rollout/publication remains separate |
 | Credential provisioning/rotation | User custody | Password manager/existing SSH context; no secret contents in tracked files |
 | Live Vikunja task updates | User authorized E01 completion and next-story pickup | Replacement token works; E01 completion and CAL-005 pickup written and read back successfully |
 

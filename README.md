@@ -2,7 +2,7 @@
 
 Calicortado is a personal second brain: capture thoughts quickly, keep notes in plain Markdown, and retrieve useful information through search and local AI answers.
 
-Status: E01 foundation completed locally, 2026-09-27. Product scope, environment inventory, offline tooling and seven API contracts are documented and checked. This is not a running product. E01 completion is synchronized to Vikunja; CAL-005 is In progress. No deployment or publication was performed. See [E01 evidence](docs/acceptance/e01.md).
+Status: E01 foundation completed locally, 2026-09-27. Product scope, environment inventory, offline tooling and seven API contracts are documented and checked. This is not a running product. E01 completion is synchronized to Vikunja; CAL-005 is In progress. The source baseline is published; no services have been deployed. See [E01 evidence](docs/acceptance/e01.md).
 
 ## First complete release
 

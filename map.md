@@ -63,4 +63,4 @@ Initial application/compute placements are selected and generic infrastructure i
 
 The imported 62-task project is mapped. CAL-001–004 and CAL-E01 are verified Done with execution evidence; CAL-005 is verified in the In progress column. Private live IDs and credentials stay in ignored local state. Preserve the existing project; do not re-import the backlog.
 
-The user-supplied Git remote remains configured; no initial commit or push has been performed. Source and private inventory remain separate. All live DNS/TLS changes follow the access matrix and infrastructure Git workflow.
+The initial sanitized source baseline was committed and pushed to the user-supplied remote on 2026-09-28. Source and private inventory remain separate. All live DNS/TLS changes follow the access matrix and infrastructure Git workflow.
