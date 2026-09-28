@@ -2,6 +2,21 @@
 
 Project decisions, evidence and handoffs. Keep records limited to the second brain.
 
+## 2026-09-29 — Git-delivered live probe preparation / CAL-005
+
+**Context/options/choice:** the user requested the next item. The infrastructure checkout now matches its fetched remote; no merge is needed. Preserve existing drafts and unrelated files. Prepare two inactive source phases for one disposable hostname: first application ingress, then compute ingress. The current DNS generator rejects competing owners, so do not add the same hostname to two active source locations. Status: preparation authorized; live mutation not yet performed.
+
+**Reason/consequences:** stage backend B before publishing its DNS, and retain running backend A until old caches expire. Use the existing ingress and certificate resolver, a digest-pinned synthetic backend, temporary BasicAuth, and no backend host ports. This reuses the previous fixture decision, not a production identity decision. Keep deployment files in the infrastructure repository and private mappings/credentials ignored. Each enabling/move/removal phase must travel through Git; node sudo stays with the user. Alternatives of copying configuration directly or introducing independent DNS overrides conflict with the existing delivery/ownership model.
+
+**Next verification:** prove the phase generator and one-record DNS delta, render both Compose configurations with synthetic inputs, document exact startup/move/rollback commands and record live prerequisites before any node mutation.
+
+**Observed results:** fetched infrastructure main matches the local source, so no merge was needed. Four relevant node checkouts lag unrelated newer source; existing untracked files on two nodes were left intact. Prepared two inactive route phases, a concrete operator procedure and two tests in the infrastructure repository. Both new tests and three earlier draft tests pass; both Compose phases render with synthetic values, no published backend ports or state mounts, and missing auth/domain fail closed. Prepared private phase files stay ignored. The selected live DNS/file-provider settings do not contain the test hostname; effective manual overrides, cache lifetimes and the required network checks remain pre-activation gates.
+
+**Decision refinement:** use the existing targeted DNS refresh helper rather than global rendering because the newer unrelated source includes tunnel changes. The helper requests sudo for installed inventory, so the operator runs it; refresh/recreate one resolver at a time. Preserve A through convergence and keep the same caller URL/credentials. A Compose profile prevents accidental startup but does not exclude active source from DNS scanning; never add both source owners simultaneously.
+
+**Handoff:** README, map, endpoint guide and this decision log updated; infrastructure owns the phase generator, tests and live procedure alongside prior drafts. All 23 application checks pass; CAL-005 evidence was updated in Vikunja and read back with Done false. No live mutation occurred. Requested authorization against the concrete publication/probe/DNS/cleanup procedure; operator retains sudo. Next action: upon approval, publish the reviewed inactive package and phase-A enabling change, then execute preflight and coordinate the targeted operator steps. Keep CAL-005 open until actual DNS/relocation evidence exists.
+
+
 ## 2026-09-28 — Disposable ingress rehearsal / CAL-005
 
 **Context/options/choice:** the user authorized the next route-check step. Use an isolated local Docker Compose fixture with pinned Traefik and synthetic backends, a temporary certificate and temporary BasicAuth credentials. Alternative testing on existing ingress would require a live enabling change and could affect current services. Local Docker is available. Status: implementation selected; results pending.
