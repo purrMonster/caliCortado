@@ -1,0 +1,1810 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Calicortado capture API",
+    "version": "0.1.0",
+    "description": "E01 contract baseline. No production implementation implied. See docs/contracts.md and docs/security.md."
+  },
+  "servers": [
+    {
+      "url": "https://capture.calicortado.test",
+      "description": "Offline fixture domain; production base URL is configurable."
+    }
+  ],
+  "security": [
+    {
+      "AccessToken": []
+    }
+  ],
+  "paths": {
+    "/v1/captures": {
+      "post": {
+        "operationId": "capture",
+        "summary": "capture",
+        "x-audience": "calicortado:capture",
+        "x-required-scope": "capture:create",
+        "x-allowed-actors": [
+          "display",
+          "device"
+        ],
+        "x-max-body-bytes": 300000,
+        "x-deadline-seconds": 15,
+        "parameters": [
+          {
+            "name": "X-Request-ID",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Trace ID, never an authorization grant."
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Must equal body.capture_id; immutable identity across online and offline paths."
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation; see semantic invariants in docs/contracts.md",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CaptureResult"
+                },
+                "example": {
+                  "capture_id": "22222222-2222-4222-8222-222222222222",
+                  "note_id": "11111111-1111-4111-8111-111111111111",
+                  "revision": 1,
+                  "durable": true,
+                  "sync_state": "pending"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid_request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "request_id": "22222222-2222-4222-8222-222222222222",
+                  "code": "invalid_request",
+                  "message": "invalid request",
+                  "retryable": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "request_id": "22222222-2222-4222-8222-222222222222",
+                  "code": "unauthenticated",
+                  "message": "unauthenticated",
+                  "retryable": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "request_id": "22222222-2222-4222-8222-222222222222",
+                  "code": "forbidden",
+                  "message": "forbidden",
+                  "retryable": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not_found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "request_id": "22222222-2222-4222-8222-222222222222",
+                  "code": "not_found",
+                  "message": "not found",
+                  "retryable": false
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "request_id": "22222222-2222-4222-8222-222222222222",
+                  "code": "conflict",
+                  "message": "conflict",
+                  "retryable": false
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "cursor_expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "request_id": "22222222-2222-4222-8222-222222222222",
+                  "code": "cursor_expired",
+                  "message": "cursor expired",
+                  "retryable": false
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "too_large",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "request_id": "22222222-2222-4222-8222-222222222222",
+                  "code": "too_large",
+                  "message": "too large",
+                  "retryable": false
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "busy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "request_id": "22222222-2222-4222-8222-222222222222",
+                  "code": "busy",
+                  "message": "busy",
+                  "retryable": true
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "request_id": "22222222-2222-4222-8222-222222222222",
+                  "code": "unavailable",
+                  "message": "unavailable",
+                  "retryable": true
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "deadline_exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "request_id": "22222222-2222-4222-8222-222222222222",
+                  "code": "deadline_exceeded",
+                  "message": "deadline exceeded",
+                  "retryable": true
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Capture"
+              },
+              "example": {
+                "capture_id": "22222222-2222-4222-8222-222222222222",
+                "vault_id": "vault-demo",
+                "text": "The synthetic telescope is blue.",
+                "source": "test",
+                "created_at": "2026-09-27T00:00:00Z"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "operationId": "ready",
+        "summary": "Restricted readiness",
+        "x-audience": "calicortado:capture",
+        "x-required-scope": "health:read",
+        "x-allowed-actors": [
+          "monitor"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ready",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                },
+                "example": {
+                  "status": "ready",
+                  "version": "0.1.0"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "request_id": "22222222-2222-4222-8222-222222222222",
+                  "code": "unauthenticated",
+                  "message": "Request not permitted",
+                  "retryable": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Not ready",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "request_id": "22222222-2222-4222-8222-222222222222",
+                  "code": "unavailable",
+                  "message": "Request not permitted",
+                  "retryable": true
+                }
+              }
+            }
+          }
+        },
+        "x-max-body-bytes": 0,
+        "x-deadline-seconds": 3
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "AccessToken": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Opaque audience-scoped token, validated through authenticated introspection. Never accept caller-supplied claims."
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "code": {
+            "enum": [
+              "invalid_request",
+              "unauthenticated",
+              "forbidden",
+              "not_found",
+              "conflict",
+              "cursor_expired",
+              "too_large",
+              "busy",
+              "unavailable",
+              "deadline_exceeded"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "retryable": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "request_id",
+          "code",
+          "message",
+          "retryable"
+        ],
+        "examples": [
+          {
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "code": "forbidden",
+            "message": "Request not permitted",
+            "retryable": false
+          }
+        ]
+      },
+      "Health": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "ready",
+              "degraded"
+            ]
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40
+          }
+        },
+        "required": [
+          "status",
+          "version"
+        ],
+        "examples": [
+          {
+            "status": "ready",
+            "version": "0.1.0"
+          }
+        ]
+      },
+      "Note": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "note_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "vault_id": {
+            "type": "string",
+            "pattern": "^vault-[a-z0-9-]{1,48}$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "content_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 262144
+          },
+          "indexable": {
+            "type": "boolean"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "note_id",
+          "vault_id",
+          "revision",
+          "content_hash",
+          "text",
+          "indexable",
+          "updated_at"
+        ],
+        "examples": [
+          {
+            "note_id": "11111111-1111-4111-8111-111111111111",
+            "vault_id": "vault-demo",
+            "revision": 1,
+            "content_hash": "64f644d454f141796deca77aee233ceddb37b9efb5a64e5f697c879eaeb944d6",
+            "indexable": true,
+            "updated_at": "2026-09-27T00:00:00Z",
+            "text": "The synthetic telescope is blue."
+          }
+        ]
+      },
+      "NoteSummary": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "note_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "vault_id": {
+            "type": "string",
+            "pattern": "^vault-[a-z0-9-]{1,48}$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "content_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "indexable": {
+            "type": "boolean"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "note_id",
+          "vault_id",
+          "revision",
+          "content_hash",
+          "indexable",
+          "updated_at"
+        ],
+        "examples": [
+          {
+            "note_id": "11111111-1111-4111-8111-111111111111",
+            "vault_id": "vault-demo",
+            "revision": 1,
+            "content_hash": "64f644d454f141796deca77aee233ceddb37b9efb5a64e5f697c879eaeb944d6",
+            "indexable": true,
+            "updated_at": "2026-09-27T00:00:00Z"
+          }
+        ]
+      },
+      "NotePage": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NoteSummary"
+            },
+            "maxItems": 50
+          },
+          "next_cursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 512
+          },
+          "snapshot_cursor": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          }
+        },
+        "required": [
+          "items",
+          "next_cursor",
+          "snapshot_cursor"
+        ],
+        "examples": [
+          {
+            "items": [
+              {
+                "note_id": "11111111-1111-4111-8111-111111111111",
+                "vault_id": "vault-demo",
+                "revision": 1,
+                "content_hash": "64f644d454f141796deca77aee233ceddb37b9efb5a64e5f697c879eaeb944d6",
+                "indexable": true,
+                "updated_at": "2026-09-27T00:00:00Z"
+              }
+            ],
+            "next_cursor": null,
+            "snapshot_cursor": "fixture-cursor-1"
+          }
+        ]
+      },
+      "Change": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "sequence": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "note_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "vault_id": {
+            "type": "string",
+            "pattern": "^vault-[a-z0-9-]{1,48}$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "kind": {
+            "enum": [
+              "created",
+              "updated",
+              "deleted",
+              "excluded",
+              "renamed"
+            ]
+          }
+        },
+        "required": [
+          "sequence",
+          "note_id",
+          "vault_id",
+          "revision",
+          "kind"
+        ],
+        "examples": [
+          {
+            "sequence": 1,
+            "note_id": "11111111-1111-4111-8111-111111111111",
+            "vault_id": "vault-demo",
+            "revision": 1,
+            "kind": "created"
+          }
+        ]
+      },
+      "ChangePage": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Change"
+            },
+            "maxItems": 100
+          },
+          "next_cursor": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "has_more": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "items",
+          "next_cursor",
+          "has_more"
+        ],
+        "examples": [
+          {
+            "items": [
+              {
+                "sequence": 1,
+                "note_id": "11111111-1111-4111-8111-111111111111",
+                "vault_id": "vault-demo",
+                "revision": 1,
+                "kind": "created"
+              }
+            ],
+            "next_cursor": "fixture-cursor-1",
+            "has_more": false
+          }
+        ]
+      },
+      "Capture": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "capture_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "vault_id": {
+            "type": "string",
+            "pattern": "^vault-[a-z0-9-]{1,48}$"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 262144
+          },
+          "source": {
+            "enum": [
+              "iphone",
+              "mac",
+              "web",
+              "test"
+            ]
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "capture_id",
+          "vault_id",
+          "text",
+          "source",
+          "created_at"
+        ],
+        "examples": [
+          {
+            "capture_id": "22222222-2222-4222-8222-222222222222",
+            "vault_id": "vault-demo",
+            "text": "The synthetic telescope is blue.",
+            "source": "test",
+            "created_at": "2026-09-27T00:00:00Z"
+          }
+        ]
+      },
+      "CaptureResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "capture_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "note_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "durable": {
+            "const": true
+          },
+          "sync_state": {
+            "enum": [
+              "pending",
+              "synced"
+            ]
+          }
+        },
+        "required": [
+          "capture_id",
+          "note_id",
+          "revision",
+          "durable",
+          "sync_state"
+        ],
+        "examples": [
+          {
+            "capture_id": "22222222-2222-4222-8222-222222222222",
+            "note_id": "11111111-1111-4111-8111-111111111111",
+            "revision": 1,
+            "durable": true,
+            "sync_state": "pending"
+          }
+        ]
+      },
+      "SnapshotRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "vault_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^vault-[a-z0-9-]{1,48}$"
+            },
+            "maxItems": 10,
+            "minItems": 1,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "vault_ids"
+        ],
+        "examples": [
+          {
+            "vault_ids": [
+              "vault-demo"
+            ]
+          }
+        ]
+      },
+      "Snapshot": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "snapshot_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "enum": [
+              "pending",
+              "ready",
+              "failed"
+            ]
+          },
+          "source_cursor": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "manifest_hash": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "snapshot_id",
+          "status",
+          "source_cursor",
+          "manifest_hash",
+          "expires_at"
+        ],
+        "examples": [
+          {
+            "snapshot_id": "33333333-3333-4333-8333-333333333333",
+            "status": "ready",
+            "source_cursor": "fixture-cursor-1",
+            "manifest_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "expires_at": "2026-09-28T00:00:00Z"
+          }
+        ]
+      },
+      "SnapshotManifest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "snapshot_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "source_cursor": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "format_version": {
+            "const": "1"
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "relative_path": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 512
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "relative_path",
+                "sha256",
+                "bytes"
+              ]
+            },
+            "maxItems": 10000
+          }
+        },
+        "required": [
+          "snapshot_id",
+          "source_cursor",
+          "format_version",
+          "files"
+        ],
+        "examples": [
+          {
+            "snapshot_id": "33333333-3333-4333-8333-333333333333",
+            "source_cursor": "fixture-cursor-1",
+            "format_version": "1",
+            "files": [
+              {
+                "relative_path": "vault-demo/00-Inbox/synthetic.md",
+                "sha256": "64f644d454f141796deca77aee233ceddb37b9efb5a64e5f697c879eaeb944d6",
+                "bytes": 33
+              }
+            ]
+          }
+        ]
+      },
+      "EmbeddingRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "model_version": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 8192
+            },
+            "maxItems": 32,
+            "minItems": 1
+          }
+        },
+        "required": [
+          "model_version",
+          "inputs"
+        ],
+        "examples": [
+          {
+            "model_version": "fixture-embedding-v1",
+            "inputs": [
+              "synthetic telescope"
+            ]
+          }
+        ]
+      },
+      "EmbeddingResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "model_version": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "dimensions": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4096
+          },
+          "vectors": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "maxItems": 4096
+            },
+            "maxItems": 32
+          }
+        },
+        "required": [
+          "model_version",
+          "dimensions",
+          "vectors"
+        ],
+        "examples": [
+          {
+            "model_version": "fixture-embedding-v1",
+            "dimensions": 3,
+            "vectors": [
+              [
+                0.2,
+                0.3,
+                0.5
+              ]
+            ]
+          }
+        ]
+      },
+      "Generation": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "generation_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "model_version": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "dimensions": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4096
+          }
+        },
+        "required": [
+          "generation_id",
+          "model_version",
+          "dimensions"
+        ],
+        "examples": [
+          {
+            "generation_id": "33333333-3333-4333-8333-333333333333",
+            "model_version": "fixture-embedding-v1",
+            "dimensions": 3
+          }
+        ]
+      },
+      "GenerationState": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "generation_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "state": {
+            "enum": [
+              "building",
+              "active"
+            ]
+          }
+        },
+        "required": [
+          "generation_id",
+          "state"
+        ],
+        "examples": [
+          {
+            "generation_id": "33333333-3333-4333-8333-333333333333",
+            "state": "building"
+          }
+        ]
+      },
+      "Chunk": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "chunk_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "note_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "vault_id": {
+            "type": "string",
+            "pattern": "^vault-[a-z0-9-]{1,48}$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "content_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 8192
+          },
+          "vector": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 4096
+          }
+        },
+        "required": [
+          "chunk_id",
+          "note_id",
+          "vault_id",
+          "revision",
+          "content_hash",
+          "text",
+          "vector"
+        ],
+        "examples": [
+          {
+            "chunk_id": "22222222-2222-4222-8222-222222222222",
+            "note_id": "11111111-1111-4111-8111-111111111111",
+            "vault_id": "vault-demo",
+            "revision": 1,
+            "content_hash": "64f644d454f141796deca77aee233ceddb37b9efb5a64e5f697c879eaeb944d6",
+            "text": "The synthetic telescope is blue.",
+            "vector": [
+              0.2,
+              0.3,
+              0.5
+            ]
+          }
+        ]
+      },
+      "IndexBatch": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "generation_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "chunks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Chunk"
+            },
+            "maxItems": 100,
+            "minItems": 1
+          }
+        },
+        "required": [
+          "generation_id",
+          "chunks"
+        ],
+        "examples": [
+          {
+            "generation_id": "33333333-3333-4333-8333-333333333333",
+            "chunks": [
+              {
+                "chunk_id": "22222222-2222-4222-8222-222222222222",
+                "note_id": "11111111-1111-4111-8111-111111111111",
+                "vault_id": "vault-demo",
+                "revision": 1,
+                "content_hash": "64f644d454f141796deca77aee233ceddb37b9efb5a64e5f697c879eaeb944d6",
+                "text": "The synthetic telescope is blue.",
+                "vector": [
+                  0.2,
+                  0.3,
+                  0.5
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "WriteResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "accepted": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          }
+        },
+        "required": [
+          "accepted"
+        ],
+        "examples": [
+          {
+            "accepted": 1
+          }
+        ]
+      },
+      "DeleteIndex": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "vault_id": {
+            "type": "string",
+            "pattern": "^vault-[a-z0-9-]{1,48}$"
+          },
+          "note_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "through_revision": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "vault_id",
+          "note_id",
+          "through_revision"
+        ],
+        "examples": [
+          {
+            "vault_id": "vault-demo",
+            "note_id": "11111111-1111-4111-8111-111111111111",
+            "through_revision": 1
+          }
+        ]
+      },
+      "IndexQuery": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "vault_id": {
+            "type": "string",
+            "pattern": "^vault-[a-z0-9-]{1,48}$"
+          },
+          "generation_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "vector": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 4096
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20
+          },
+          "cursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 512
+          }
+        },
+        "required": [
+          "vault_id",
+          "generation_id",
+          "query",
+          "limit"
+        ],
+        "examples": [
+          {
+            "vault_id": "vault-demo",
+            "generation_id": "33333333-3333-4333-8333-333333333333",
+            "query": "telescope",
+            "vector": [
+              0.2,
+              0.3,
+              0.5
+            ],
+            "limit": 5
+          }
+        ]
+      },
+      "IndexHit": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "chunk_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "note_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "vault_id": {
+            "type": "string",
+            "pattern": "^vault-[a-z0-9-]{1,48}$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "score": {
+            "type": "number"
+          },
+          "snippet": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          }
+        },
+        "required": [
+          "chunk_id",
+          "note_id",
+          "vault_id",
+          "revision",
+          "score",
+          "snippet"
+        ],
+        "examples": [
+          {
+            "chunk_id": "22222222-2222-4222-8222-222222222222",
+            "note_id": "11111111-1111-4111-8111-111111111111",
+            "vault_id": "vault-demo",
+            "revision": 1,
+            "score": 0.9,
+            "snippet": "The synthetic telescope is blue."
+          }
+        ]
+      },
+      "IndexResults": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IndexHit"
+            },
+            "maxItems": 20
+          },
+          "next_cursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 512
+          }
+        },
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "examples": [
+          {
+            "items": [
+              {
+                "chunk_id": "22222222-2222-4222-8222-222222222222",
+                "note_id": "11111111-1111-4111-8111-111111111111",
+                "vault_id": "vault-demo",
+                "revision": 1,
+                "score": 0.9,
+                "snippet": "The synthetic telescope is blue."
+              }
+            ],
+            "next_cursor": null
+          }
+        ]
+      },
+      "SearchRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "vault_id": {
+            "type": "string",
+            "pattern": "^vault-[a-z0-9-]{1,48}$"
+          },
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20
+          },
+          "cursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 512
+          }
+        },
+        "required": [
+          "vault_id",
+          "query",
+          "limit"
+        ],
+        "examples": [
+          {
+            "vault_id": "vault-demo",
+            "query": "What colour is the telescope?",
+            "limit": 5
+          }
+        ]
+      },
+      "Source": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "note_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "vault_id": {
+            "type": "string",
+            "pattern": "^vault-[a-z0-9-]{1,48}$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "snippet": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "source_uri": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          }
+        },
+        "required": [
+          "note_id",
+          "vault_id",
+          "revision",
+          "snippet",
+          "source_uri"
+        ],
+        "examples": [
+          {
+            "note_id": "11111111-1111-4111-8111-111111111111",
+            "vault_id": "vault-demo",
+            "revision": 1,
+            "snippet": "The synthetic telescope is blue.",
+            "source_uri": "https://app.calicortado.test/notes/11111111-1111-4111-8111-111111111111"
+          }
+        ]
+      },
+      "SearchResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Source"
+            },
+            "maxItems": 20
+          },
+          "next_cursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 512
+          },
+          "mode": {
+            "enum": [
+              "hybrid",
+              "lexical"
+            ]
+          }
+        },
+        "required": [
+          "items",
+          "next_cursor",
+          "mode"
+        ],
+        "examples": [
+          {
+            "items": [
+              {
+                "note_id": "11111111-1111-4111-8111-111111111111",
+                "vault_id": "vault-demo",
+                "revision": 1,
+                "snippet": "The synthetic telescope is blue.",
+                "source_uri": "https://app.calicortado.test/notes/11111111-1111-4111-8111-111111111111"
+              }
+            ],
+            "next_cursor": null,
+            "mode": "hybrid"
+          }
+        ]
+      },
+      "InferenceRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "model_version": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32768
+          },
+          "max_output_tokens": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2048
+          }
+        },
+        "required": [
+          "request_id",
+          "model_version",
+          "prompt",
+          "max_output_tokens"
+        ],
+        "examples": [
+          {
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "model_version": "fixture-inference-v1",
+            "prompt": "Synthetic prompt, no real notes.",
+            "max_output_tokens": 64
+          }
+        ]
+      },
+      "InferenceResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "model_version": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 32768
+          },
+          "finish_reason": {
+            "enum": [
+              "stop",
+              "length"
+            ]
+          }
+        },
+        "required": [
+          "request_id",
+          "model_version",
+          "text",
+          "finish_reason"
+        ],
+        "examples": [
+          {
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "model_version": "fixture-inference-v1",
+            "text": "Blue.",
+            "finish_reason": "stop"
+          }
+        ]
+      },
+      "AnswerRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "vault_id": {
+            "type": "string",
+            "pattern": "^vault-[a-z0-9-]{1,48}$"
+          },
+          "question": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "required": [
+          "request_id",
+          "vault_id",
+          "question"
+        ],
+        "examples": [
+          {
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "vault_id": "vault-demo",
+            "question": "What colour is the telescope?"
+          }
+        ]
+      },
+      "AnswerResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "enum": [
+              "answered",
+              "insufficient_evidence",
+              "inference_unavailable"
+            ]
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 32768
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Source"
+            },
+            "maxItems": 8
+          }
+        },
+        "required": [
+          "request_id",
+          "status",
+          "text",
+          "sources"
+        ],
+        "examples": [
+          {
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "status": "answered",
+            "text": "The telescope is blue.",
+            "sources": [
+              {
+                "note_id": "11111111-1111-4111-8111-111111111111",
+                "vault_id": "vault-demo",
+                "revision": 1,
+                "snippet": "The synthetic telescope is blue.",
+                "source_uri": "https://app.calicortado.test/notes/11111111-1111-4111-8111-111111111111"
+              }
+            ]
+          }
+        ]
+      },
+      "CancelResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "cancelled": {
+            "const": true
+          }
+        },
+        "required": [
+          "request_id",
+          "cancelled"
+        ],
+        "examples": [
+          {
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "cancelled": true
+          }
+        ]
+      },
+      "StreamSources": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "sources"
+          },
+          "request_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Source"
+            },
+            "maxItems": 8
+          }
+        },
+        "required": [
+          "type",
+          "request_id",
+          "sources"
+        ],
+        "examples": [
+          {
+            "type": "sources",
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "sources": [
+              {
+                "note_id": "11111111-1111-4111-8111-111111111111",
+                "vault_id": "vault-demo",
+                "revision": 1,
+                "snippet": "The synthetic telescope is blue.",
+                "source_uri": "https://app.calicortado.test/notes/11111111-1111-4111-8111-111111111111"
+              }
+            ]
+          }
+        ]
+      },
+      "StreamDelta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "delta"
+          },
+          "request_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 8192
+          }
+        },
+        "required": [
+          "type",
+          "request_id",
+          "text"
+        ],
+        "examples": [
+          {
+            "type": "delta",
+            "request_id": "22222222-2222-4222-8222-222222222222",
+            "text": "Blue."
+          }
+        ]
+      },
+      "StreamDone": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "done"
+          },
+          "request_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "type",
+          "request_id"
+        ],
+        "examples": [
+          {
+            "type": "done",
+            "request_id": "22222222-2222-4222-8222-222222222222"
+          }
+        ]
+      },
+      "StreamError": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "error"
+          },
+          "error": {
+            "$ref": "#/components/schemas/Error"
+          }
+        },
+        "required": [
+          "type",
+          "error"
+        ],
+        "examples": [
+          {
+            "type": "error",
+            "error": {
+              "request_id": "22222222-2222-4222-8222-222222222222",
+              "code": "unavailable",
+              "message": "Inference unavailable",
+              "retryable": true
+            }
+          }
+        ]
+      },
+      "Identity": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "active": {
+            "type": "boolean"
+          },
+          "issuer": {
+            "const": "https://auth.calicortado.test"
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "actor": {
+            "enum": [
+              "display",
+              "capture",
+              "indexer",
+              "search",
+              "answers",
+              "backup",
+              "monitor",
+              "device"
+            ]
+          },
+          "audience": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "maxItems": 20,
+            "uniqueItems": true
+          },
+          "vault_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^vault-[a-z0-9-]{1,48}$"
+            },
+            "maxItems": 10,
+            "uniqueItems": true
+          },
+          "expires_at": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "active",
+          "issuer",
+          "subject",
+          "actor",
+          "audience",
+          "scopes",
+          "vault_ids",
+          "expires_at"
+        ],
+        "examples": [
+          {
+            "active": true,
+            "issuer": "https://auth.calicortado.test",
+            "subject": "user-demo",
+            "actor": "display",
+            "audience": "calicortado:search",
+            "scopes": [
+              "search:query"
+            ],
+            "vault_ids": [
+              "vault-demo"
+            ],
+            "expires_at": 2000000000
+          }
+        ]
+      }
+    }
+  }
+}

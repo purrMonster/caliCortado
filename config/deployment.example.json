@@ -1,0 +1,19 @@
+{
+  "endpoints": {
+    "display": "https://app.${DOMAIN}",
+    "identity": "https://auth.${DOMAIN}",
+    "sync": "https://sync.${DOMAIN}",
+    "data": "https://data.${DOMAIN}",
+    "capture": "https://capture.${DOMAIN}",
+    "index": "https://index.${DOMAIN}",
+    "embeddings": "https://embed.${DOMAIN}",
+    "search": "https://search.${DOMAIN}",
+    "inference": "https://infer.${DOMAIN}",
+    "answers": "https://answers.${DOMAIN}",
+    "backup": "https://backup.${DOMAIN}"
+  },
+  "credentials": {
+    "service_token": "${CALICORTADO_SERVICE_TOKEN}",
+    "introspection_client_secret": "${CALICORTADO_INTROSPECTION_CLIENT_SECRET}"
+  }
+}

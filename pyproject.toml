@@ -1,0 +1,11 @@
+[project]
+name = "calicortado-foundation"
+version = "0.1.0.dev0"
+description = "Offline contract-first development foundation for Calicortado"
+requires-python = ">=3.12,<3.13"
+dependencies = []
+
+[tool.calicortado]
+tested-python = "3.12.14"
+contract-version = "0.1.0"
+openapi-version = "3.1.1"

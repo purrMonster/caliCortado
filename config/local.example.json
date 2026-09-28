@@ -1,0 +1,19 @@
+{
+  "endpoints": {
+    "display": "https://app.calicortado.test",
+    "identity": "https://auth.calicortado.test",
+    "sync": "https://sync.calicortado.test",
+    "data": "https://data.calicortado.test",
+    "capture": "https://capture.calicortado.test",
+    "index": "https://index.calicortado.test",
+    "embeddings": "https://embed.calicortado.test",
+    "search": "https://search.calicortado.test",
+    "inference": "https://infer.calicortado.test",
+    "answers": "https://answers.calicortado.test",
+    "backup": "https://backup.calicortado.test"
+  },
+  "credentials": {
+    "service_token": "${CALICORTADO_SERVICE_TOKEN}",
+    "introspection_client_secret": "${CALICORTADO_INTROSPECTION_CLIENT_SECRET}"
+  }
+}

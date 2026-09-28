@@ -1,0 +1,15 @@
+.venv/
+.venv-*/
+__pycache__/
+*.pyc
+.local/
+.env
+.env.local
+.env.*
+*.env
+!.env.example
+*.pem
+*.key
+node_modules/
+dist/
+*.egg-info/
