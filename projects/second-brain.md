@@ -1,5 +1,7 @@
 # Calicortado modular architecture
 
+For an illustrated introduction before the technical specification, read the [proposal and technology guide](../docs/proposal.md). This document remains the architecture source of truth.
+
 Status: E01 contract baseline, 2026-09-27. Separately deployable layers and individual domains behind Traefik are confirmed requirements. Product shape and the environment-configured DOMAIN are user-confirmed; host placements and live identity/TLS integration remain later-story gates. See [contracts](../docs/contracts.md), [security](../docs/security.md) and [environment](../docs/operations/environment.md).
 
 [plan.md](../plan.md) contains the component epics, 50 implementation stories and acceptance gates. No services described here are claimed to be built.

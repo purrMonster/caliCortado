@@ -57,6 +57,8 @@ Client capture remains independent of inference. Search must work while inferenc
 
 ## Next action
 
+The [plain-language proposal and architecture guide](docs/proposal.md) now explains the product for nontechnical readers, with standalone overview/service-flow diagrams and an HTML reading copy. It summarizes existing decisions; delivery state and live approval gates are unchanged.
+
 CAL-005 remains In progress. The [endpoint registry](docs/operations/endpoints.md) records initial placements and the per-node Traefik/DNS procedure. Read-only inspection of both DNS container settings and application/compute file-provider rules found no candidate-prefix collision. Other target nodes/manual overrides and live multi-network resolution remain unchecked.
 
 The infrastructure-owned disposable HTTPS fixture passed seven checks, including denied authentication, certificate trust and a backend switch with the same client. Cleanup passed. This local test uses temporary BasicAuth and an explicit proxy restart; it does not close production identity, DNS relocation or firewall gates. Infrastructure source now matches its remote; inactive two-phase live probe candidates and operator rollback instructions are prepared and validated. Node checkouts lag newer unrelated changes, so rollout uses targeted DNS refresh and preserves existing files. Await the requested live-change authorization and operator sudo steps before enabling the probe. Inference ingress and backup recovery retain their separate readiness gates.

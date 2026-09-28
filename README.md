@@ -14,6 +14,8 @@ Default domain addresses derive from the `DOMAIN` environment variable, set by t
 
 ## Start here
 
+New to the project? Read the [plain-language proposal](docs/proposal.md), or open the [illustrated HTML reading copy](docs/proposal.html). It explains the user experience, full architecture, technology, privacy boundaries and delivery stages. The [overview diagram](docs/architecture-overview.svg) and [service-flow diagram](docs/architecture-flow.svg) can also be viewed separately.
+
 [plan.md](plan.md) is the detailed **Vikunja-shaped backlog: 12 component epics, 50 stories, eight proposed sprints**. Every story has a completed outcome, blockers, steps, acceptance checks, documentation deliverables and required runbook decisions. The generated [Vikunja import ZIP](exports/vikunja/calicortado-vikunja-import.zip) and [JSON](exports/vikunja/data.json) are now available; follow the [import guide](exports/vikunja/README.md). The user-imported board is now verified (62 tasks); E01 completion and CAL-005 pickup are synchronized.
 
 | Document | Purpose |

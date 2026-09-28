@@ -2,6 +2,18 @@
 
 Project decisions, evidence and handoffs. Keep records limited to the second brain.
 
+## 2026-09-29 — Plain-language proposal and architecture guide / CAL-001, CAL-004
+
+**Context/options/choice:** the user requested a complete architecture diagram and proposal pitch that teaches nontechnical readers the technology. Create a reader-facing proposal with a visual architecture overview, detailed request-flow diagram, glossary, delivery stages and dated evidence. Provide a portable HTML reading copy alongside repository Markdown. This is documentation work, not a new product scope or deployment grant.
+
+**Reason/status/consequences:** lead with everyday outcomes, then introduce technical terms with concrete analogies and their limits. Reuse the confirmed release scope, domain boundaries, plaintext bridge trust boundary and current evidence. Clearly label proposed components and unmeasured targets; do not sell the offline foundation as a working product. Architecture and backlog retain ownership in their existing documents; this guide explains and links to them rather than becoming another tracker. Implementation selected; visual and content verification pending.
+
+**Delivered:** [proposal and technology guide](docs/proposal.md), [self-contained HTML reading copy](docs/proposal.html), [architecture overview](docs/architecture-overview.svg) and [complete service-flow artwork](docs/architecture-flow.svg). The guide also contains the logical Mermaid flow, all 11 endpoints, capture/search/answer journeys, privacy and failure boundaries, a glossary, the staged release proposal, current evidence and open decisions. [Build script](tools/build-proposal.py) regenerates the HTML and SVGs without added dependencies. README, map and the architecture document link to the guide.
+
+**Verification:** project documentation/contract checks and all 23 application tests passed. Parsed both SVGs as XML; checked titles/descriptions, all 11 endpoint labels, unique HTML identifiers, local/navigation links, embedded diagrams, absence of scripts and deterministic regeneration. These checks caught and corrected duplicate SVG marker identifiers. Browser visual review was unavailable because the browser tool rejects local-file navigation; no browser-rendered or print-layout verification is claimed. The Markdown was queued for display in the app.
+
+**Handoff:** documentation request completed; no architecture boundary, story status or live authorization changed. No infrastructure files or services were modified for this proposal. The next product action remains the prepared live relocation procedure once its outstanding approval/operator steps are resolved. Review the proposal's visual presentation in a local browser before treating it as a print-ready publication.
+
 ## 2026-09-29 — Git-delivered live probe preparation / CAL-005
 
 **Context/options/choice:** the user requested the next item. The infrastructure checkout now matches its fetched remote; no merge is needed. Preserve existing drafts and unrelated files. Prepare two inactive source phases for one disposable hostname: first application ingress, then compute ingress. The current DNS generator rejects competing owners, so do not add the same hostname to two active source locations. Status: preparation authorized; live mutation not yet performed.
