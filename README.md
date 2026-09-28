@@ -37,4 +37,4 @@ Notes, secrets and private exports stay outside source control. Planning does no
 
 ## Next action
 
-CAL-005 is in progress: the [domain registry and verification procedure](docs/operations/endpoints.md) are prepared using `${DOMAIN}`. Next obtain private resolver/ingress inputs and check domain collisions. Reconcile the infrastructure checkout with observed node revision before proposing configuration changes. Live mutations follow the [access matrix](docs/operations/access.md); E01 does not authorize deployment. The iPhone capture trial follows the sync prototype.
+CAL-005 is in progress: the [domain registry and verification procedure](docs/operations/endpoints.md) are prepared using `${DOMAIN}`. Private resolver/ingress inputs are recorded; selected live DNS/router configurations show no candidate-prefix collision. A disposable local HTTPS/authentication rehearsal passed seven checks and was cleaned up. Next reconcile infrastructure history and prepare the live disposable DNS/ingress relocation change. Live mutations follow the [access matrix](docs/operations/access.md); E01 does not authorize deployment. The iPhone capture trial follows the sync prototype.

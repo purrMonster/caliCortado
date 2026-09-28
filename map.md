@@ -1,6 +1,6 @@
 # Calicortado component map
 
-Last reviewed: 2026-09-27. E01 is completed as an offline foundation; other components remain planned, not verified deployments. [plan.md](plan.md) owns the 50-story backlog and eight sprint goals. [E01 evidence](docs/acceptance/e01.md) records checks and limits.
+Last reviewed: 2026-09-28. E01 is completed as an offline foundation; other components remain planned, not verified deployments. [plan.md](plan.md) owns the 50-story backlog and eight sprint goals. [E01 evidence](docs/acceptance/e01.md) records checks and limits.
 
 ## Domain boundaries
 
@@ -29,7 +29,7 @@ Every named domain passes through Traefik. Local mirror access is confined to th
 | Epic | Component | Sprint allocation | Current state / next output |
 |---|---|---|---|
 | CAL-E01 | Foundation and contracts | S0 | Complete locally: scope, inventory, offline workspace and validated contracts; no deployment |
-| CAL-E02 | Traefik edge and identity | S1 | Planned: private domains, TLS, auth and bypass-denial tests |
+| CAL-E02 | Traefik edge and identity | S1 | In progress: registry and local ingress rehearsal verified; live DNS/relocation and identity gates remain |
 | CAL-E03 | Vault sync and data service | S1–S2 | Planned: sync prototype, persistent vault and HTTP data boundary |
 | CAL-E04 | Capture clients and ingestion | S2 | Planned: iPhone/Mac capture and idempotent API/fallback |
 | CAL-E05 | Backup and recovery | S3 | Planned: independent domain endpoint and full restore |
@@ -57,9 +57,9 @@ Client capture remains independent of inference. Search must work while inferenc
 
 ## Next action
 
-CAL-005 is In progress locally and in Vikunja: [endpoint registry and DNS procedure](docs/operations/endpoints.md) now reflect user-confirmed Pi-hole and per-node Traefik. Infrastructure docs are readable again; private inventory distinguishes documented nodes from new product placement candidates. Next verify live DNS/router ownership and resolve unassigned roles. Inference ingress and backup recovery have documented outstanding gates. No DNS or deployment changes were made.
+CAL-005 remains In progress. The [endpoint registry](docs/operations/endpoints.md) records initial placements and the per-node Traefik/DNS procedure. Read-only inspection of both DNS container settings and application/compute file-provider rules found no candidate-prefix collision. Other target nodes/manual overrides and live multi-network resolution remain unchecked.
 
-Initial application/compute placements are selected and generic infrastructure ingress drafts are prepared. Three offline draft/DNS checks pass. Next reconcile deployed infrastructure revisions and existing node edits, then complete live zone/file-provider checks and prepare the authorized rollout; synthetic relocation does not close CAL-005's live acceptance gate.
+The infrastructure-owned disposable HTTPS fixture passed seven checks, including denied authentication, certificate trust and a backend switch with the same client. Cleanup passed. This local test uses temporary BasicAuth and an explicit proxy restart; it does not close production identity, DNS relocation or firewall gates. Next reconcile infrastructure history and prepare the exact Git-delivered live probe, DNS changes and rollback. Inference ingress and backup recovery retain their separate readiness gates.
 
 The imported 62-task project is mapped. CAL-001–004 and CAL-E01 are verified Done with execution evidence; CAL-005 is verified in the In progress column. Private live IDs and credentials stay in ignored local state. Preserve the existing project; do not re-import the backlog.
 

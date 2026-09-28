@@ -2,6 +2,20 @@
 
 Project decisions, evidence and handoffs. Keep records limited to the second brain.
 
+## 2026-09-28 — Disposable ingress rehearsal / CAL-005
+
+**Context/options/choice:** the user authorized the next route-check step. Use an isolated local Docker Compose fixture with pinned Traefik and synthetic backends, a temporary certificate and temporary BasicAuth credentials. Alternative testing on existing ingress would require a live enabling change and could affect current services. Local Docker is available. Status: implementation selected; results pending.
+
+**Reason/consequences:** prove HTTPS routing and negative authentication cases before preparing node changes. BasicAuth is a fixture only, not the CAL-007 identity decision. A file-provider backend switch does not prove cross-host DNS relocation, production certificate issuance or firewall isolation. Keep these acceptance gates open. Deployment assets and execution evidence belong in the infrastructure repository; private inventory stays ignored. Reuses the prior Git delivery and domain-boundary decisions; no node configuration will be copied or modified.
+
+**Next verification:** run the disposable fixture, confirm its cleanup, inspect live file-provider and DNS configuration read-only, then record the remaining live rollout prerequisites.
+
+**Results and implementation refinement:** all seven disposable checks passed with digest-pinned images; cleanup verified removal of fixture containers, networks and temporary credentials. The infrastructure repository owns the executable and README evidence. The local proxy requires a separate loopback-facing network while backends stay internal. Windows newline conversion affected the temporary password hash and was corrected. File watching did not apply the backend change; choose an explicit fixture-proxy restart for the reproducible procedure instead of claiming hot reload. These choices affect only the test harness, not product boundaries.
+
+**Read-only results:** both live DNS containers contained 30 generated records with no candidate-prefix match or parent-zone catch-all. Selected application/compute file-provider rules had no candidate-prefix matches. Other nodes/manual overrides and real service-network DNS still need inspection/test at the relevant rollout gate. Private raw evidence is ignored. No production DNS, credentials, node files or services changed.
+
+**Handoff:** changed README, map, endpoint guide and this runbook; infrastructure changes add the probe, usage/evidence and runbook entry alongside the prior examples/tests. All 23 application tests and three infrastructure draft checks pass. Updated CAL-005 in Vikunja and read back the evidence with Done still false. CAL-005 remains In progress: the local backend switch is not cross-host DNS relocation, and temporary BasicAuth is not production identity. Next reconcile infrastructure history while preserving node edits and prepare the exact disposable live route/DNS diff, verification and rollback for operator-owned privileged rollout steps.
+
 ## 2026-09-28 — Initial placements and opt-in ingress drafts / CAL-005
 
 **Authorization:** the user requested proceeding with the pending actions. Continue route/DNS preparation and read-only checks; do not infer permission to restart nodes or bypass the infrastructure Git delivery process.
