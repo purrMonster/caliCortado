@@ -180,3 +180,7 @@ These references support the routing/protocol choices, not compatibility claims 
 - [restic repository preparation](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html) documents repository backends, including REST; CAL-018 verifies the chosen deployed versions and authentication.
 
 Next action: CAL-001 establishes release scope; CAL-004 turns this proposed contract design into versioned, testable interfaces.
+
+## CAL-009 local compatibility result — 2026-10-01
+
+The pinned upstream bridge CouchDB peer passed encrypted Unicode writes/updates, fresh-peer reads and deletion through isolated verified HTTPS. Nine upstream runtime tests and six local integration checks passed; raw synthetic database documents lacked the original path/content marker. See [version matrix, commands and limits](../docs/operations/sync.md). Proceed only to the filesystem bridge experiment; no Obsidian/plugin pair or production sync stack is accepted yet. Identity, failure handling, persistent mirror and device gates remain open.

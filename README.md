@@ -39,4 +39,6 @@ Notes, secrets and private exports stay outside source control. Planning does no
 
 ## Next action
 
+The [CAL-009 local sync investigation](docs/operations/sync.md) passed headless encrypted Unicode exchange through Traefik. Next prove the filesystem bridge and failure/restart behaviour with synthetic notes. Production identity and real-device sync remain unverified; this experiment leaves no running service.
+
 CAL-005 is in progress: the [domain registry and verification procedure](docs/operations/endpoints.md) are prepared using `${DOMAIN}`. Private resolver/ingress inputs are recorded; selected live DNS/router configurations show no candidate-prefix collision. A disposable local HTTPS/authentication rehearsal passed seven checks and was cleaned up. The two-phase probe/DNS change and rollback remain preparation here. Promotion to infrastructure and live activation wait until the product is ready for deployment; the earlier standalone probe rollout request is superseded. Live mutations follow the [access matrix](docs/operations/access.md); E01 does not authorize deployment. The iPhone capture trial follows the sync prototype.

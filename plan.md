@@ -421,10 +421,12 @@ The detailed cards below are ready to copy into Vikunja descriptions. All refere
 | Parent task | CAL-E03 — Vault sync and data service |
 | Priority | High |
 | Labels | `type:story`, `release:v0.1`, `component:data`, `sprint:S1`, `estimate:5` |
-| Bucket / done | Backlog / false |
+| Bucket / done | In progress / false (limited local investigation; CAL-007 gate remains) |
 | Assignee / dates | Unassigned / unset until sprint planning |
 | Blocked by | CAL-004, CAL-007 |
 | Estimate | 5 relative points; re-estimate at pickup |
+
+**Pickup 2026-10-01:** limited synthetic headless compatibility investigation completed with [evidence and reproduction](docs/operations/sync.md). Nine upstream runtime tests and six domain/TLS integration checks passed. The production identity dependency and all device/filesystem acceptance gates remain open; this is not story completion.
 
 **Completed outcome:** As a note owner, I know the selected sync stack can preserve my files before I rely on it.
 

@@ -1,6 +1,6 @@
 # Calicortado component map
 
-Last reviewed: 2026-09-29. E01 is completed as an offline foundation; other components remain planned, not verified deployments. [plan.md](plan.md) owns the 50-story backlog and eight sprint goals. [E01 evidence](docs/acceptance/e01.md) records checks and limits.
+Last reviewed: 2026-10-01. E01 is completed as an offline foundation; other components remain planned, not verified deployments. [plan.md](plan.md) owns the 50-story backlog and eight sprint goals. [E01 evidence](docs/acceptance/e01.md) records checks and limits.
 
 ## Domain boundaries
 
@@ -30,7 +30,7 @@ Every named domain passes through Traefik. Local mirror access is confined to th
 |---|---|---|---|
 | CAL-E01 | Foundation and contracts | S0 | Complete locally: scope, inventory, offline workspace and validated contracts; no deployment |
 | CAL-E02 | Traefik edge and identity | S1 | In progress: registry and local ingress rehearsal verified; live DNS/relocation and identity gates remain |
-| CAL-E03 | Vault sync and data service | S1–S2 | Planned: sync prototype, persistent vault and HTTP data boundary |
+| CAL-E03 | Vault sync and data service | S1–S2 | CAL-009 local headless compatibility passed; filesystem/device and identity gates open |
 | CAL-E04 | Capture clients and ingestion | S2 | Planned: iPhone/Mac capture and idempotent API/fallback |
 | CAL-E05 | Backup and recovery | S3 | Planned: independent domain endpoint and full restore |
 | CAL-E06 | Private remote access | S3 | Planned: chosen transport, allowed routes and device tests |
@@ -56,6 +56,8 @@ Contracts → private domains/identity → sync/data/capture → recovery/remote
 Client capture remains independent of inference. Search must work while inference is stopped. Backup has its own failure signal and independent storage. Observation windows and explicit owner decisions remain real gates.
 
 ## Next action
+
+CAL-009 local investigation now has [reproducible encrypted headless peer evidence](docs/operations/sync.md): nine upstream runtime tests and six isolated HTTPS integration checks passed. Next implement the filesystem bridge experiment with restart, rename/delete and decryption-failure checks; no device setup is needed yet. CAL-007 remains a production acceptance prerequisite.
 
 The [plain-language proposal and architecture guide](docs/proposal.md) now explains the product for nontechnical readers, with standalone overview/service-flow diagrams and an HTML reading copy. It summarizes existing decisions; delivery state and live approval gates are unchanged.
 

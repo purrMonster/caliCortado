@@ -2,6 +2,19 @@
 
 Project decisions, evidence and handoffs. Keep records limited to the second brain.
 
+## 2026-10-01 — Local sync compatibility investigation / CAL-009
+
+**Context/options/choice:** the user requested the next work item following the proposed local sync/data prototype. CAL-009 depends on CAL-007, whose production identity integration is not complete. Start only an explicitly limited local compatibility investigation with synthetic notes; preserve the dependency and all device/live acceptance gates. Do not pretend CAL-005 or CAL-007 is complete. Status: investigation in progress.
+
+**Reason/consequences:** inspect and pin the upstream bridge rather than inventing an incompatible sync implementation. Any disposable runtime must use a configured sync domain through Traefik and isolated temporary credentials. All source preparation, checks and evidence stay in Calicortado under the user's revised ownership rule. No real vault, infrastructure change or device setup is authorized by this step. Next verification: upstream compatibility and runtime requirements, then a bounded reproducible local experiment or a documented incompatibility that determines the next step.
+
+**Implementation decisions and observed corrections:** pin the upstream bridge revision and Deno/CouchDB/Traefik image digests; preserve its frozen lock rather than replacing sync internals. Cache runtime imports at build time because the upstream install alone left a network fetch in the offline test. Restrict the runtime test selection to nine tests that do not require a Docker CLI inside the image; the separate Compose packaging test failed for that environmental reason. Run CouchDB as its supplied non-root user after root entrypoint ownership changes on the read-only config caused startup failure. Use a temporary CA and a distinct server certificate after Deno correctly rejected a CA used as a leaf. No verification bypass was introduced.
+
+**Results:** [local harness](examples/sync-compat/README.md) passed nine upstream runtime tests and six headless integration checks through the configured sync domain: TLS/readiness and invalid auth, Unicode create/read, absence of original path/content marker in raw documents, reverse update, fresh-peer decryption and deletion. Cleanup verified no project containers, networks, volumes or temporary credentials remained. Build/source caches stay local. Evidence and version matrix are in [sync operations](docs/operations/sync.md). This is not a filesystem bridge, process-restart, conflict, wrong-key or iPhone/Mac proof; the dependency and story acceptance remain open.
+
+**Handoff:** all 28 project tests and documentation/contract checks pass. CAL-009 was updated in Vikunja, moved to In progress and read back with Done false; dependencies were preserved. Added the fixture Dockerfile, runner, synthetic TypeScript probe and operation guide; updated README, map, plan and architecture. No infrastructure repository or real vault was changed. Next bounded step is bidirectional filesystem mirroring with restart/rename/delete and detectable decryption failures, using the same isolated domain fixture. User device setup is not needed yet.
+
+
 ## 2026-09-29 — Keep all preparation in Calicortado / CAL-005
 
 **User decision:** infrastructure preparation is part of Calicortado and stays here until the product is ready for deployment. This supersedes the earlier placement decision and the pending request to publish or activate the preparation in infrastructure. No live rollout is implied.
